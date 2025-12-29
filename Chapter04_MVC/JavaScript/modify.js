@@ -2,29 +2,21 @@
 // 1. 파일 경로 설정
 const CSS_FILE_PATH = "/resources/css/modify.css";
 // 2. link 태그 생성 및 속성 추가
-let linkEle = document.createElement('link');
-linkEle.rel = 'stylesheet';
-linkEle.type = 'text/css';
-linkEle.href = CSS_FILE_PATH;
-// 3. head 태그에 link 엘리먼트 추가
-document.head.appendChild(linkEle);
+addCss(CSS_FILE_PATH);
 
 let f = document.forms[0];
 // 버튼 이벤트 추가
-document.querySelectorAll('.panel-body-btns button').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        let me = e.currentTarget;
-        if (me.id == 'modifyBtn') {
-            modify();
-        }
-        else if (me.id == 'indexBtn') {
-            const { pageNum, amount } = getStorageData(); // 구조분해할당을 통해 pageNum과 amount를 가져옴
-            location.href = `/board/list?pageNum=${pageNum}&amount=${amount}`;
-        }
-        else if (me.id == 'removeBtn') {
-            remove();
-        }
-    })
+addEvent_btn(".panel-body-btns button", (e) => {
+    let me = e.currentTarget;
+    if (me.id == 'modifyBtn') {
+        modify();
+    }
+    else if (me.id == 'indexBtn') {
+        goIndex(); //menu.js의 함수 호출
+    }
+    else if (me.id == 'removeBtn') {
+        remove();
+    }
 });
 function modify() {
     if (!f.title.value) {
