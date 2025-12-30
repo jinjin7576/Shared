@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.joonzis</groupId>
 	<artifactId>controller</artifactId>
-	<name>Chapter03_MVC</name>
+	<name>Chapter05_REST</name>
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
 	<properties>
@@ -80,7 +80,6 @@
 					<artifactId>jmxri</artifactId>
 				</exclusion>
 			</exclusions>
-			<!--  <scope>runtime</scope> -->
 		</dependency>
 
 		<!-- @Inject -->
@@ -115,32 +114,34 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 			<scope>test</scope>
-		</dependency>        
-		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		</dependency> 
+		
+		<!-- 새로 추가한 라이브러리 -->
+		<!-- Jackson-databind  -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
 		<dependency>
-		      <groupId>org.projectlombok</groupId>
-		      <artifactId>lombok</artifactId>
-		      <version>1.18.0</version>
-      			<scope>provided</scope>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.12.2</version>
 		</dependency>
 		
-		<!-- spring-tx 트랜잭션 관련 라이브러리 -->
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+		<!-- Jackson-dataformat-xml  -->
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-xml -->
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-tx</artifactId>
-		    <version>5.0.7.RELEASE</version>
+		    <groupId>com.fasterxml.jackson.dataformat</groupId>
+		    <artifactId>jackson-dataformat-xml</artifactId>
+		    <version>2.12.2</version>
 		</dependency>
 		
-		<!-- spring-jdbc DB연동을 위한 라이브러리 -->
-		<!-- https://mvnrepository.com/artifact/org.springframework/spring-jdbc -->
+		<!-- gson  -->
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>
-		    <groupId>org.springframework</groupId>
-		    <artifactId>spring-jdbc</artifactId>
-		    <version>5.0.7.RELEASE</version>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>2.8.6</version>
 		</dependency>
 		
-		<!-- spring-test 단위 테스트를 진행하기 위한 라이브러리 -->
+		<!-- spring-test  -->
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-test -->
 		<dependency>
 		    <groupId>org.springframework</groupId>
@@ -149,35 +150,13 @@
 		    <scope>test</scope>
 		</dependency>
 		
-		<!-- DB -->
-		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<!-- lombok   -->
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
-		    <groupId>com.zaxxer</groupId>
-		    <artifactId>HikariCP</artifactId>
-		    <version>2.7.8</version>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.0</version>
 		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
-		<dependency>
-		    <groupId>org.mybatis</groupId>
-		    <artifactId>mybatis</artifactId>
-		    <version>3.4.6</version>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
-		<dependency>
-		    <groupId>org.mybatis</groupId>
-		    <artifactId>mybatis-spring</artifactId>
-		    <version>1.3.2</version>
-		</dependency>
-		
-		<!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
-		<dependency>
-		    <groupId>org.bgee.log4jdbc-log4j2</groupId>
-		    <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
-		    <version>1.16</version>
-		</dependency>		
-		
 	</dependencies>
     <build>
         <plugins>
