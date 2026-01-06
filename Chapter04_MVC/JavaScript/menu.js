@@ -2,6 +2,17 @@
 // 		1. 기존 이벤트 방지
 // 		2. 해당 속성에서 값 꺼내서 분기 태우기
 
+const CSS_FILE_PATHS = {
+    get: "/resources/css/get.css",
+    reply: "/resources/css/reply.css",
+    modal: "/resources/css/modal.css",
+    menu: "/resources/css/menu.css",
+    modify: "/resources/css/modify.css",
+    page: "/resources/css/page.css",
+    boardList: "/resources/css/boardList.css",
+    header: "/resources/css/header.css"
+};
+
 // css 파일 추가
 function addCss(cssPath) {
     // link 태그 생성 및 속성 추가
@@ -23,10 +34,18 @@ function addCss(cssPath) {
     document.head.appendChild(linkEle);
 }
 function addEvent_a(selector = "a", callback) {
+    if (typeof selector === 'function') {
+        callback = selector;
+        selector = "a";
+    }
     document.querySelectorAll(selector)
         .forEach(a => a.addEventListener("click", callback));
 }
 function addEvent_btn(selector = "button", callback) {
+    if (typeof selector === 'function') {
+        callback = selector;
+        selector = "button";
+    }
     document.querySelectorAll(selector)
         .forEach(b => b.addEventListener("click", callback));
 }
@@ -48,14 +67,14 @@ function goIndex() {
     const { pageNum, amount } = getStorageData(); // 구조분해할당을 통해 pageNum과 amount를 가져옴
     location.href = `/board/list?pageNum=${pageNum}&amount=${amount}`;
 }
-addEvent_a((e) => {
+addEvent_a(".header a", (e) => {
     e.preventDefault();
     const href = e.target.getAttribute("href");
     if (href == "mainPage") {
         location.href = "/";
     }
     else if (href == "boardList") {
-        location.href = "board/list";
+        location.href = "/board/list";
     }
     else console.log("wrong request");
 
