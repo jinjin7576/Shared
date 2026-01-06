@@ -9,7 +9,15 @@ const replyService = (function () {
             },
             body: JSON.stringify(reply) // js 객체 -> JSON 문자열
         })
-            .then(response => response.text())// 응답이 String이라서 text()로 변환
+            .then(response => {
+                console.log(response);
+                if (!response.ok) {
+                    console.log(response.status);
+                    console.log(response.statusText);
+                    throw new Error("에러 발생");
+                }
+                return response.text();
+            })// 응답이 String이라서 text()로 변환
             .then(data => {
                 callback(data);
 
@@ -29,9 +37,6 @@ const replyService = (function () {
     function remove(rno, callback) {
         fetch('/reply/' + rno, {
             method: 'delete', //deleteMapping이 된 메서드를 타야 해서 delete로
-            header: {
-                'Content-Type': 'application/json; charset=utf-8'
-            }
             //body는 필요없음(서버가 rno만 필요함)
         })
             .then(response => response.text())
