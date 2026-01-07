@@ -134,6 +134,9 @@ function registerReply() {
         replyer: inputReplyer.value
     };
     rs.add(sendData, () => {
+        // 입력 내용 초기화
+        inputReply.value = '';
+        inputReplyer.value = '';
         closeModal();
         showList();
     })
@@ -165,13 +168,12 @@ function modReplyModalStyle() {
 
 // 수정
 function modifyReply() {
-    if (!inputReply.value || !inputReplyer.value) {
-        alert("댓글 내용과 댓글 작성자 이름을 입력해주세요.");
+    if (!inputReply.value) {
+        alert("댓글 내용을 입력해주세요.");
         return;
     }
     let obj = {
         reply: inputReply.value,
-        replyer: inputReplyer.value
     }
     //여기서 사용한 rno는 전역변수
     rs.update(rno, obj, result => {

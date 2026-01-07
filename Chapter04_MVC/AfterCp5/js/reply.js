@@ -1,5 +1,3 @@
-console.log("reply.js");
-
 const replyService = (function () {
     function add(reply, callback) {
         fetch('/reply/new', {
@@ -10,7 +8,6 @@ const replyService = (function () {
             body: JSON.stringify(reply) // js 객체 -> JSON 문자열
         })
             .then(response => {
-                console.log(response);
                 if (!response.ok) {
                     console.log(response.status);
                     console.log(response.statusText);
