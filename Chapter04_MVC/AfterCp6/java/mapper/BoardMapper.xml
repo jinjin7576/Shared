@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.joonzis.mapper.BoardMapper">
+	<select id="getList" parameterType="org.joonzis.domain.Criteria" resultType="org.joonzis.domain.BoardVO">
+		<![CDATA[
+		SELECT bno, title, writer, regdate, replycnt
+		FROM
+		    (SELECT rownum rn, a.*
+		    FROM
+		        (SELECT bno, title, writer, regdate, replycnt
+		        FROM tbl_board
+		        ORDER BY bno DESC) a
+		    WHERE rownum <= #{pageNum} * #{amount})
+		WHERE rn > (#{pageNum}-1) * #{amount}
+		]]>
+	</select>
+	
+	<select id="getTotal" resultType="int">
+		SELECT Count(bno) FROM tbl_board
+	</select>
+	
+	<insert id="insert" parameterType="org.joonzis.domain.BoardVO">
+		INSERT INTO tbl_board
+		VALUES(
+			seq_board.nextval,
+			#{title},
+			#{content},
+			#{writer},
+			sysdate,
+			sysdate
+		)
+	</insert>
+	
+	<select id="read" parameterType="int" resultType="org.joonzis.domain.BoardVO">
+		SELECT * FROM tbl_board WHERE bno=#{bno}
+	</select>
+	
+	<update id="update" parameterType="org.joonzis.domain.BoardVO">
+		UPDATE 
+			tbl_board
+		SET 
+			title=#{title},
+		 	content=#{content}, 
+		 	writer=#{writer}, 
+		 	updatedate=sysdate
+		WHERE 
+			bno=#{bno}
+	</update>
+	
+	<delete id="delete">
+		DELETE FROM tbl_board WHERE bno=#{bno}
+	</delete>
+	
+	<update id="updateReplyCnt" parameterType="map">
+		UPDATE tbl_board
+		SET replycnt = replycnt + #{amount}
+		WHERE bno=#{bno}
+	</update>
+</mapper>
