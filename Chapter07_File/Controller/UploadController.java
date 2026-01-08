@@ -2,6 +2,7 @@ package org.joonzis.controller;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -133,6 +134,25 @@ public class UploadController {
 		
 		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
 	}
+	
+	// 파일 삭제
+	@SuppressWarnings("deprecation")
+	@PostMapping("/deleteFile")
+	@ResponseBody //문자열을 리턴할 것이기 때문
+	public ResponseEntity<String> deleteFile(@RequestBody String dataFile) {
+		log.info("fileName : " + dataFile);
+		File file;
+		try {
+			file = new File("C:\\upload\\" + URLDecoder.decode(dataFile));
+			file.delete();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<String>("delete",HttpStatus.OK);
+	}
+	
+	
+	
 	
 	// 오늘 날짜의 경로를 문자열로 생성
 	public String getFolder() {

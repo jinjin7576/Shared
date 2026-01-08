@@ -13,9 +13,13 @@ function checkExtension(fileName, fileSize) {
     }
     return true;
 }
+// 비어있는 요소 복사를 위해 가져오기
+let uploadDiv = document.querySelector(".uploadDiv");
+// 하위 노드까지 복사
+let cloneObj = uploadDiv.firstElementChild.cloneNode(true);
 
 //uploadBtn 클릭 이벤트
-document.querySelector("#uploadBtn").addEventListener('click', (e) => {
+document.querySelector("#uploadBtn").addEventListener('click', () => {
     const inputFile = document.querySelector('input[type=file]');
     // 파일 정보는 프로퍼티로
     const files = inputFile.files;
@@ -27,14 +31,67 @@ document.querySelector("#uploadBtn").addEventListener('click', (e) => {
         }
         formData.append('uploadFile', files[i]);
     }
-
+    //실제 파일 업로드
     fetch('/uploadAsyncAction', {
         method: 'post',
         body: formData
     })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(data => {
             console.log(data);
+            //파일 추가 후 초기화
+            inputFile.value = '';
+            showUploadedFile(data);
         })
         .catch(err => console.log(err));
 });
+
+// 업로드 완료된 목록 보여주는 함수
+let uploadResult = document.querySelector('.uploadResult ul');
+function showUploadedFile(uploadResultArr) {
+    let str = '';
+    uploadResultArr.forEach(file => {
+        // 특수 문자가 섞인 파일명의 경우 URL이 깨질 수 있음
+        // 그래서 URL 인코딩을 해야 함
+        let fileCallPath = encodeURIComponent(
+            file.uploadPath +
+            '/' +
+            file.uuid +
+            "_" +
+            file.fileName
+        );
+
+        str += `<li>`;
+        str += `<a href="download/?fileName=${fileCallPath}">${file.fileName}`;
+        str += `</a>`;
+        str += `<span data-file="${fileCallPath}">  X</span>`;
+        str += `</li>`;
+    });
+    uploadResult.innerHTML = str;
+    addEvent_X();
+}
+
+// span 클릭 이벤트
+function addEvent_X() {
+    document.querySelectorAll("span").forEach(ele => {
+        //tagName 을 통해 태그 비교 가능 => ele.tagName ==='SPAN' 같은 조건문으로
+        // 하지만, 여기서 다른 span은 없으니 그냥 span을 사용
+        ele.addEventListener("click", () => {
+            console.log(`click event(delete), data-file : ${ele.getAttribute('data-file')}`);
+
+            // 파일 삭제
+            fetch('/deleteFile', {
+                method: 'post',
+                body: ele.getAttribute('data-file'),
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                })
+                .catch(err => console.log(err));
+        });
+    });
+}
