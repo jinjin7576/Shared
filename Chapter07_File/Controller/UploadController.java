@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.joonzis.domain.AttachedFileDTO;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -72,6 +73,9 @@ public class UploadController {
 		log.info("uploadAsyncAction...");
 		
 		for (MultipartFile multipartFile : uploadFile) {
+			
+			AttachedFileDTO attachDTO = new AttachedFileDTO();
+			
 			log.info("----------------------");
 			log.info("UploadFileName : " + multipartFile.getOriginalFilename());
 			log.info("Upload File Size : " + multipartFile.getSize());
@@ -88,10 +92,20 @@ public class UploadController {
 			try {
 				File saveFile = new File(uploadPath, uploadFileName);
 				multipartFile.transferTo(saveFile);
+				
+				// 담기
+				attachDTO.setUuid(uuid.toString());
+				attachDTO.setUploadPath(getFolder());
+				attachDTO.setFileName(multipartFile.getOriginalFilename());
+				
+				list.add(attachDTO);
+				
 			} catch (Exception e) {
 				log.error(e.getMessage());
 			}
 		}
+		
+		return new ResponseEntity<List<AttachedFileDTO>>(list,HttpStatus.OK);
 	}
 	
 	
