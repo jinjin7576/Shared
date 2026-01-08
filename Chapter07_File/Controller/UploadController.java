@@ -1,6 +1,7 @@
 package org.joonzis.controller;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -8,6 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.joonzis.domain.AttachedFileDTO;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -81,7 +85,7 @@ public class UploadController {
 			log.info("Upload File Size : " + multipartFile.getSize());
 			
 			String uploadFileName = multipartFile.getOriginalFilename();
-			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1);
+			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("\\") + 1); // 예외처리 코드??
 			
 			log.info("only file name : " + uploadFileName);
 			
@@ -108,6 +112,27 @@ public class UploadController {
 		return new ResponseEntity<List<AttachedFileDTO>>(list,HttpStatus.OK);
 	}
 	
+	@GetMapping(value="/download",
+			produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> downloadFile(String fileName){
+		log.info("downloadFile" + fileName);
+		Resource resource = new FileSystemResource("C:\\upload\\"+fileName);
+		log.info("resource : " + resource);
+		
+		String resourceName = resource.getFilename();
+		HttpHeaders headers = new HttpHeaders();
+		
+		try {
+	         headers.add("Content-Disposition",
+	            "attachment; fileName=" + new String(resourceName.getBytes("utf-8"),
+	            "ISO-8859-1"));
+	      } catch (UnsupportedEncodingException e) {
+	         e.printStackTrace();
+	      }
+		
+		return new ResponseEntity<Resource>(resource, headers, HttpStatus.OK);
+	}
 	
 	// 오늘 날짜의 경로를 문자열로 생성
 	public String getFolder() {
