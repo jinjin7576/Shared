@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+		
+	<!-- Beans -->
+	<!-- 403 -->
+	<bean id ="customAccessDenied"
+			class="org.joonzis.security.CustomAccessDeniedHandler"></bean>
+	<!-- 로그인 성공 후처리 -->
+	<bean id="customLoginSuccess"
+			class="org.joonzis.security.CustomLoginSuccessHandler"></bean>
+	<!-- 비밀번호 인코딩하는 인코더 -->
+	<bean id="bcryptPasswordEncoder" 
+      class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"></bean>
+      
+    <!--  -->
+    <bean id="customUserDetailService"
+    	class="org.joonzis.security.CustomUserDetailService"></bean>
+      
+	<!-- HTTP 통신 보안 구성 요소 -->
+	<!-- auto-config? :  -->
+	<security:http auto-config="true">
+		<!-- pattern : 요청URL / access : 권한 수준 -->
+		<security:intercept-url pattern="/sample/all" access="permitAll" />
+		<security:intercept-url pattern="/sample/member" access="hasRole('ROLE_MEMBER')" />
+		<security:intercept-url pattern="/sample/admin" access="hasRole('ROLE_ADMIN')" />
+		
+		<!-- <security:form-login/>  기본 제공되는 login 폼으로 이동 -->
+			<!--login-page :  /customLogin으로 서블릿 요청 -->
+		<security:form-login 
+			login-page="/customLogin" 
+			authentication-success-handler-ref="customLoginSuccess"/>
+		<!-- authentication-success-handler-ref : 성공 시 핸들러 참조(성공 시 후처리) -->
+		
+		<security:logout
+			logout-url="/customLogout"
+			invalidate-session="true"/> <!-- 로그아웃할 때 세션도 같이 삭제할 것인가? -->
+		
+		
+		<!-- 권한 문제 발생 시(403)-> error-page의 URL로 강제 요청 -->
+		<!-- <security:access-denied-handler error-page="/accessError"/> -->
+		<security:access-denied-handler ref="customAccessDenied"/>
+		
+		<security:csrf disabled="true"/>
+	</security:http>
+	
+	<!-- 사용자 인증 관리 -->
+	<security:authentication-manager>
+		<security:authentication-provider user-service-ref="customUserDetailService"> <!-- 바로 밑에 jdbc-user-service를 주석처리한 뒤에 서비스 참조 경로 추가 -->
+<!-- 		<security:jdbc-user-service 
+				data-source-ref="dataSource"
+				users-by-username-query="SELECT userid,userpw, enabled FROM tbl_member WHERE userid=?"
+				authorities-by-username-query="SELECT userid, auth FROM tbl_member_auth WHERE userid=?"/>  -->
+				<!-- 히카리 DB 커넥션 풀 -->
+				<security:password-encoder ref="bcryptPasswordEncoder"/> <!-- 비밀번호 인코더(암호화) -->
+
+		<!--
+ 			<security:user-service> -->
+				<!-- 정적으로 로그인 데이터 추가 -->
+				<!-- {noop} : 자체 인코딩(암호화) -->
+		<!--	<security:user name="member" password="{noop}member" authorities="ROLE_MEMBER"/> -->
+				<!-- 둘 이상의 권한 부여는 쉼표로 -->
+		<!-- 	<security:user name="admin" password="{noop}admin" authorities="ROLE_MEMBER, ROLE_ADMIN"/>
+
+			</security:user-service> 
+		-->
+		</security:authentication-provider>
+	</security:authentication-manager>
+</beans>
