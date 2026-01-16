@@ -1,0 +1,23 @@
+package org.joonzis.Service;
+
+import java.util.List;
+
+import org.joonzis.domain.BoardAttachVO;
+import org.joonzis.domain.BoardVO;
+import org.joonzis.domain.Criteria;
+
+public interface BoardService {
+	// 전체 리스트
+	public List<BoardVO> getList(Criteria cri);
+	public BoardVO get(int bno);
+	// 데이터 삽입
+	public void register(BoardVO vo);
+	// 데이터 삭제
+	public boolean remove(int bno);
+	// 데이터 수정
+	public boolean modify(BoardVO vo);
+	public int getTotal();
+	
+	//첨부파일 리스트
+	public List<BoardAttachVO> getAttachList(int bno);
+}

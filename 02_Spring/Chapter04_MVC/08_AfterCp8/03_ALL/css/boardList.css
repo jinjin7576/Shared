@@ -1,0 +1,107 @@
+.main {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+
+.page-header {
+	text-align: left;
+}
+
+.panel-heading {
+	padding: 15px;
+	text-align: right;
+}
+
+.panel-body {
+	width: 100%;
+	margin: auto;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+	border-radius: 5px;
+	text-align: left;
+}
+
+th,
+td {
+	border: 1px solid gray;
+	padding: 7px;
+}
+
+th {
+	background-color: pink;
+	color: teal;
+}
+
+tr th:nth-of-type(1) {
+	width: 10%
+}
+
+tr th:nth-of-type(2) {
+	width: 50%
+}
+
+tr th:nth-of-type(3) {
+	width: 20%
+}
+
+tr th:nth-of-type(4) {
+	width: 20%
+}
+
+.btn {
+	padding: 10px;
+	border-radius: 5px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+.btn-fir {
+	background-color: gray;
+	border: 1px solid gray;
+	color: #fff;
+}
+
+.page-nation li {
+	list-style: none;
+}
+
+.page-wrap {
+	text-align: center;
+	font-size: 0;
+}
+
+.page-nation {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin-top: 20px;
+}
+
+.page-nation a {
+	display: block;
+	margin: 0 3px;
+	flex: left;
+	border: 1px solid #e6e6e6;
+	width: 28px;
+	height: 28px;
+	line-height: 28px;
+	text-align: center;
+	background-color: #fff;
+	font-size: 13px;
+	color: black;
+	text-decoration: none;
+}
+
+.page-nation a.active {
+	background-color: #0078ff;
+	color: #fff;
+}
+
+.page-nation a:hover {
+	background-color: #0078ff;
+	color: #fff;
+}
